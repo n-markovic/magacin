@@ -1,10 +1,14 @@
 rs\ac\fink\evidencija_robe\dao\ProizvodDao.class
-rs\ac\fink\evidencija_robe\exception\RobaException.class
+rs\ac\fink\evidencija_robe\rest\ProstorRest.class
+rs\ac\fink\evidencija_robe\rest\ProizvodRest.class
 rs\ac\fink\evidencija_robe\dao\ProstorDao.class
+rs\ac\fink\evidencija_robe\service\ProstorService.class
+rs\ac\fink\evidencija_robe\rest\RadnikRest.class
+rs\ac\fink\evidencija_robe\service\ProizvodService.class
+rs\ac\fink\evidencija_robe\exception\RobaException.class
 rs\ac\fink\evidencija_robe\dao\RadnikDao.class
 rs\ac\fink\evidencija_robe\data\Proizvod.class
 rs\ac\fink\evidencija_robe\data\Prostor.class
 rs\ac\fink\evidencija_robe\dao\ResourceMenager.class
 rs\ac\fink\evidencija_robe\data\Radnik.class
 rs\ac\fink\evidencija_robe\service\RadnikService.class
-rs\ac\fink\evidencija_robe\rest\RadnikRest.class

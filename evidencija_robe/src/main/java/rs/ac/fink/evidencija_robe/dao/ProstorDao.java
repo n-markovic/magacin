@@ -31,7 +31,7 @@ public class ProstorDao {
         return instance;
     }
     
-    protected Prostor find(int prostor_id, Connection con) throws SQLException {
+    public Prostor findById(int prostor_id, Connection con) throws SQLException {
         PreparedStatement ps = null;
         ResultSet rs = null;
         Prostor prostor = null;
@@ -40,7 +40,7 @@ public class ProstorDao {
             ps.setInt(1, prostor_id);
             rs = ps.executeQuery();
             if (rs.next()) {
-                Radnik radnik = RadnikDao.getInstance().find(rs.getInt("radnik_id"), con);
+                Radnik radnik = RadnikDao.getInstance().find(rs.getInt("fk_radnik"), con);
                 prostor = new Prostor(prostor_id, radnik, rs.getString("ime_magacina"));
             }
         } finally {
