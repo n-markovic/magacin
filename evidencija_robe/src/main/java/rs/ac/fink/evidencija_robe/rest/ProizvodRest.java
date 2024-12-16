@@ -8,6 +8,7 @@ import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -20,27 +21,58 @@ import rs.ac.fink.evidencija_robe.exception.RobaException;
 
 @Path("proizvod")
 public class ProizvodRest {
-    private final ProizvodService prozivodService = ProizvodService.getInstance();
+    private final ProizvodService proizvodService = ProizvodService.getInstance();
+    
+    @GET
+    //@Path("")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Proizvod> getProductAll() throws RobaException {
+        return proizvodService.findProizvodiAll();
+    }
     
     @GET
     @Path("/naziv/{productName}")
     @Produces(MediaType.APPLICATION_JSON)
     public Proizvod getProductByName(@PathParam("productName") String productName) throws RobaException {
-        return prozivodService.findProizvodByName(productName);
+        return proizvodService.findProizvodByName(productName);
     }
     
     @GET
     @Path("/id/{productID}")
     @Produces(MediaType.APPLICATION_JSON)
     public Proizvod getProductByName(@PathParam("productID") int productID) throws RobaException {
-        return prozivodService.findProizvodById(productID);
+        return proizvodService.findProizvodById(productID);
     }
    
-   @GET
+    @GET
     @Path("/tip/{productType}")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Proizvod> getProductsByType(@PathParam("productType") String productType) throws RobaException {
-        return prozivodService.findProizvodiByType(productType);
+        return proizvodService.findProizvodiByType(productType);
+    }
+    
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response addProduct(Proizvod proizvod) throws RobaException{
+            proizvodService.addNewProizvod(proizvod);
+            return Response.ok().build();
+    }
+    
+    @PUT
+    @Path("/{productName}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateProduct(@PathParam("productName") String productName) throws RobaException {
+            proizvodService.updateProizvod(productName);
+            return Response.ok().build();
+    }
+    
+    @DELETE
+    @Path("/{productName}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteProduct(@PathParam("productName") String productName) throws RobaException {
+            proizvodService.deleteProizvod(productName);
+            return Response.ok().build();
     }
 
 }

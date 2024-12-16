@@ -49,6 +49,24 @@ public class ProstorDao {
         return prostor;
     }
     
+    public Prostor findByName(String ime_magacina, Connection con) throws SQLException {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Prostor prostor = null;
+        try {
+            ps = con.prepareStatement("SELECT * FROM prostor where ime_magacina=?");
+            ps.setString(1, ime_magacina);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                Radnik radnik = RadnikDao.getInstance().find(rs.getInt("fk_radnik"), con);
+                prostor = new Prostor(rs.getInt("prostor_id"), radnik, ime_magacina);
+            }
+        } finally {
+            ResourceMenager.closeResources(rs, ps);
+        }
+        return prostor;
+    }
+    
     public int insert(Prostor prostor, Connection con) throws SQLException, RobaException {
         PreparedStatement ps = null;
         ResultSet rs = null;

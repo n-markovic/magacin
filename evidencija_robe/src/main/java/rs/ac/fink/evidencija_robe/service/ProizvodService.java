@@ -64,9 +64,73 @@ public class ProizvodService {
     } finally {
         ResourceMenager.closeConnection(con);
     }
+    }
+    
+    public List<Proizvod> findProizvodiAll() throws RobaException {
+    Connection con = null;
+    try {
+        con = ResourceMenager.getConnection();
+        return ProizvodDao.getInstance().findAll(con);
+    } catch (SQLException ex) {
+        throw new RobaException("There is no products in storage room");
+    } finally {
+        ResourceMenager.closeConnection(con);
+    }
 }
 
-    
+   public int addNewProizvod(Proizvod proizvod) throws RobaException {
+        Connection con = null;
+        try {
+            con = ResourceMenager.getConnection();
+
+            return ProizvodDao.getInstance().insert(proizvod, con);
+        } catch (SQLException ex) {
+            throw new RobaException("Failed to add new product " + proizvod, ex);
+        } finally {
+            ResourceMenager.closeConnection(con);
+        }
+    }
+   
+    public void updateProizvod(String proizvodName) throws RobaException {
+        Connection con = null;
+        try {
+            con = ResourceMenager.getConnection();
+            con.setAutoCommit(false);
+            
+            Proizvod proizvod = ProizvodDao.getInstance().findByName(proizvodName, con);
+            if (proizvod != null) {
+                proizvod.setKolicina(proizvod.getKolicina() - 1);
+                ProizvodDao.getInstance().update(proizvod, con);
+            }
+            
+            con.commit();
+        } catch (SQLException ex) {
+            ResourceMenager.rollbackTransactions(con);
+            throw new RobaException("Failed to update product " + proizvodName, ex);
+        } finally {
+            ResourceMenager.closeConnection(con);
+        }
+    }
+   
+   public void deleteProizvod(String productName) throws RobaException {
+        Connection con = null;
+        try {
+            con = ResourceMenager.getConnection();
+            con.setAutoCommit(false);
+
+            Proizvod proizvod = ProizvodDao.getInstance().findByName(productName, con);
+            if (proizvod != null) {
+                ProizvodDao.getInstance().delete(proizvod, con);
+            }
+
+            con.commit();
+        } catch (SQLException ex) {
+            ResourceMenager.rollbackTransactions(con);
+            throw new RobaException("Failed to delete product with name " + productName, ex);
+        } finally {
+            ResourceMenager.closeConnection(con);
+        }
+    }
 
 
 }

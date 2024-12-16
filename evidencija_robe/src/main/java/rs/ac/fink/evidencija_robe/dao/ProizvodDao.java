@@ -26,6 +26,7 @@ public class ProizvodDao {
         return instance;
     }
     
+    
     public Proizvod findByName(String naziv, Connection con) throws SQLException {
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -61,7 +62,25 @@ public class ProizvodDao {
         ResourceMenager.closeResources(rs, ps);
     }
     return proizvodi;
-}
+    }
+    
+    public List<Proizvod> findAll(Connection con) throws SQLException {
+    PreparedStatement ps = null;
+    ResultSet rs = null;
+    List<Proizvod> proizvodi = new ArrayList<>();
+    try {
+        ps = con.prepareStatement("SELECT * FROM proizvod");
+        rs = ps.executeQuery();
+        while (rs.next()) {
+            Prostor prostor = ProstorDao.getInstance().findById(rs.getInt("fk_prostor"), con);
+            Proizvod proizvod = new Proizvod(rs.getInt("proizvod_id"), prostor,rs.getString("naziv"), rs.getString("tip"), rs.getString("tezina"), rs.getInt("kolicina"), rs.getString("napomena"));
+            proizvodi.add(proizvod);
+        }
+    } finally {
+        ResourceMenager.closeResources(rs, ps);
+    }
+    return proizvodi;
+    }
 
     
     
@@ -83,7 +102,62 @@ public class ProizvodDao {
         return proizvod;
     }
     
+   
     
+    public int insert(Proizvod proizvod, Connection con) throws SQLException, RobaException {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        int id = -1;
+        try {
+            ps = con.prepareStatement("INSERT INTO proizvod(naziv, tip, tezina, kolicina, napomena, fk_prostor) VALUES(?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, proizvod.getNaziv());
+            ps.setString(2, proizvod.getTip());
+            ps.setString(3, proizvod.getTezina());
+            ps.setInt(4, proizvod.getKolicina());
+            ps.setString(5, proizvod.getNapomena());
+            Prostor prostor = ProstorDao.getInstance().findByName(proizvod.getProstor().getImeMagacina(), con);
+            
+            if (prostor == null) {
+                throw new RobaException("Prostor " + proizvod.getProstor() + " doesn't exist in database.");
+            }
+            ps.setInt(6, prostor.getIdProstor());
+            //ps.setInt(6,2);
+            ps.executeUpdate();
+            rs = ps.getGeneratedKeys();
+            rs.next();
+            id = rs.getInt(1);
+        } finally {
+            ResourceMenager.closeResources(rs, ps);
+        }
+        return id;
+    }
+    
+    public void update(Proizvod proizvod, Connection con) throws SQLException {
+        PreparedStatement ps = null;
+        
+        try {
+            ps = con.prepareStatement("UPDATE proizvod SET kolicina=? WHERE proizvod_id=?");
+            ps.setInt(1, proizvod.getKolicina());
+            ps.setInt(2, proizvod.getIdProizvod());
+            ps.executeUpdate();
+        } finally {
+            ResourceMenager.closeResources(null, ps);
+        }
+    }
+    
+    public void delete(Proizvod proizvod, Connection con) throws SQLException {
+        PreparedStatement ps = null;
+        try {
+
+
+            //delete product
+            ps = con.prepareStatement("DELETE FROM proizvod WHERE proizvod_id=?");
+            ps.setInt(1, proizvod.getIdProizvod());
+            ps.executeUpdate();
+        } finally {
+            ResourceMenager.closeResources(null, ps);
+        }
+    }
     
     
 }

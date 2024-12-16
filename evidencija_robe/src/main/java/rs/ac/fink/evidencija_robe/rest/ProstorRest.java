@@ -29,5 +29,12 @@ public class ProstorRest {
     public Prostor getProductById(@PathParam("prostorID") int prostorID) throws RobaException {
         return prostorService.findProstorById(prostorID);
     }
+    
+    @GET
+    @Path("/naziv/{prostorName}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Prostor getProductById(@PathParam("prostorName") String prostorName) throws RobaException {
+        return prostorService.findProstorByName(prostorName);
+    }
 }
 

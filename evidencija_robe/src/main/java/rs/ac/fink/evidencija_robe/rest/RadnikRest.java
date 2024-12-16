@@ -14,6 +14,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import rs.ac.fink.evidencija_robe.data.Kredencijali;
 import rs.ac.fink.evidencija_robe.data.Radnik;
 import rs.ac.fink.evidencija_robe.service.RadnikService;
 import rs.ac.fink.evidencija_robe.exception.RobaException;
@@ -38,7 +39,18 @@ public class RadnikRest {
         return radnikService.findRadnik(productName);
     }
     
-    
+    @POST
+    @Path("/login")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response postUserLogin(Kredencijali kredencijali) throws RobaException {
+    boolean isAuthenticated = radnikService.loginUser(kredencijali.getUsername(), kredencijali.getPassword());
+    if (isAuthenticated) {
+        return Response.ok("Dobrodosli, " + kredencijali.getUsername() + "!").build();
+    } else {
+        return Response.status(Response.Status.UNAUTHORIZED).entity("Neispravno korisnicko ime ili lozinka.").build();
+    }
+    }
 
 }
 

@@ -39,4 +39,18 @@ public class ProstorService {
             ResourceMenager.closeConnection(con);
         }
     }
+    
+    public Prostor findProstorByName(String ime_magacina) throws RobaException {
+        Connection con = null;
+        try {
+            con = ResourceMenager.getConnection();
+
+            return ProstorDao.getInstance().findByName(ime_magacina, con);
+
+        } catch (SQLException ex) {
+            throw new RobaException("Failed to find product with name " + ime_magacina, ex);
+        } finally {
+            ResourceMenager.closeConnection(con);
+        }
+    }
 }

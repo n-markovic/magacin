@@ -89,4 +89,23 @@ public class RadnikDao {
             ResourceMenager.closeResources(null, ps);
         }
     }
+    
+    public boolean UserLogin(String username, String password, Connection con) throws SQLException {
+    PreparedStatement ps = null;
+    ResultSet rs = null;
+
+    try {
+        ps = con.prepareStatement("SELECT password FROM radnik WHERE username = ?");
+        ps.setString(1, username);
+        rs = ps.executeQuery();
+
+        if (rs.next()) {
+            String storedPassword = rs.getString("password");
+            return storedPassword.equals(password);
+        }
+    } finally {
+        ResourceMenager.closeResources(rs, ps);
+    }
+    return false;
+    }
 }
