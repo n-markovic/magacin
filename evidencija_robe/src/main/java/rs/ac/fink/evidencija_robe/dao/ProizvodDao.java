@@ -136,9 +136,12 @@ public class ProizvodDao {
         PreparedStatement ps = null;
         
         try {
-            ps = con.prepareStatement("UPDATE proizvod SET kolicina=? WHERE proizvod_id=?");
+            ps = con.prepareStatement("UPDATE proizvod SET kolicina=?, tip=?, tezina=?, napomena=? WHERE naziv=?");
             ps.setInt(1, proizvod.getKolicina());
-            ps.setInt(2, proizvod.getIdProizvod());
+            ps.setString(2, proizvod.getTip());
+            ps.setString(3, proizvod.getTezina());
+            ps.setString(4, proizvod.getNapomena());
+            ps.setString(5, proizvod.getNaziv());
             ps.executeUpdate();
         } finally {
             ResourceMenager.closeResources(null, ps);

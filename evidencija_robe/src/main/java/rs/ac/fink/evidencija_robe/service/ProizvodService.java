@@ -91,22 +91,23 @@ public class ProizvodService {
         }
     }
    
-    public void updateProizvod(String proizvodName) throws RobaException {
+    public void updateProizvod(Proizvod proizvod) throws RobaException {
         Connection con = null;
         try {
             con = ResourceMenager.getConnection();
             con.setAutoCommit(false);
             
-            Proizvod proizvod = ProizvodDao.getInstance().findByName(proizvodName, con);
+            //Proizvod proizvodBaza = ProizvodDao.getInstance().findById(proizvod.getIdProizvod(), con);
             if (proizvod != null) {
-                proizvod.setKolicina(proizvod.getKolicina() - 1);
+                //proizvodBaza.setKolicina(proizvod.getKolicina());
+                
                 ProizvodDao.getInstance().update(proizvod, con);
             }
             
             con.commit();
         } catch (SQLException ex) {
             ResourceMenager.rollbackTransactions(con);
-            throw new RobaException("Failed to update product " + proizvodName, ex);
+            throw new RobaException("Failed to update product " + proizvod.getNaziv(), ex);
         } finally {
             ResourceMenager.closeConnection(con);
         }

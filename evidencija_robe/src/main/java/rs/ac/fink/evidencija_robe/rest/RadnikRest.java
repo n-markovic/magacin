@@ -35,7 +35,7 @@ public class RadnikRest {
     @GET
     @Path("/{productName}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Radnik getProductByName(@PathParam("productName") int productName) throws RobaException {
+    public Radnik getRadnikByName(@PathParam("productName") int productName) throws RobaException {
         return radnikService.findRadnik(productName);
     }
     

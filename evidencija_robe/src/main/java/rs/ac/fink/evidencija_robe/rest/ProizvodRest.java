@@ -60,10 +60,10 @@ public class ProizvodRest {
     }
     
     @PUT
-    @Path("/{productName}")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateProduct(@PathParam("productName") String productName) throws RobaException {
-            proizvodService.updateProizvod(productName);
+    public Response updateProduct(Proizvod proizvod) throws RobaException {
+            proizvodService.updateProizvod(proizvod);
             return Response.ok().build();
     }
     

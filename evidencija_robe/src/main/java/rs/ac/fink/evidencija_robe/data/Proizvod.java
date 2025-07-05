@@ -36,7 +36,7 @@ public class Proizvod implements Serializable{
         this.napomena = napomena;
     }
     
-
+    
     public int getIdProizvod() {
         return proizvod_id;
     }
